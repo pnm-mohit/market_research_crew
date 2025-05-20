@@ -1,0 +1,33 @@
+application:
+  name: "Market Research Crew"
+  version: "0.1.0"
+  debug: false
+
+logging:
+  level: "INFO"
+  file_path: "logs/market_research.log"
+
+research:
+  default_market: "Global Technology"
+  max_concurrent_jobs: 3
+  report_output_dir: "reports"
+
+tools:
+  web_search:
+    provider: "google_custom_search"
+    max_results: 10
+  market_research:
+    data_sources:
+      - "google_trends"
+      - "financial_apis"
+      - "news_aggregators"
+
+llm:
+  default_model: "ollama/phi3:mini"
+  temperature: 0.3
+  max_tokens: 4096
+
+web_interface:
+  host: "0.0.0.0"
+  port: 5000
+  socket_support: true 
