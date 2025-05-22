@@ -1,0 +1,36 @@
+---
+# Tasks configuration for Market Research Crew
+tasks:
+  trend_analysis_task:
+    description: "Conduct web research on {market} and identify the top 3 current trends in this market. For each trend, provide a brief description, supporting evidence, and its significance to the market."
+    expected_output: "A detailed analysis of the top 3 current trends in {market}, with each trend including a clear name/title, description of what the trend involves, supporting evidence from recent sources, and explanation of why this trend matters."
+    agent: "trend_analyst"
+    # No dependencies for the first task
+
+  competitor_analysis_task:
+    description: "Research and identify the top 3 competitors in the {market} market. For each competitor, analyze their key strengths and weaknesses based on web research."
+    expected_output: "A comprehensive analysis of the top 3 competitors in the {market}, including for each: company name, brief company description, market position/share (if available), 2-3 key strengths, and 2-3 key weaknesses or vulnerabilities."
+    agent: "competitor_researcher"
+    # No dependencies - can run in parallel with trend analysis
+
+  data_synthesis_task:
+    description: "Review the trend analysis and competitor analysis for {market}. Synthesize this information to develop 3 strategic insights that would be valuable for a company operating in or entering this market."
+    expected_output: "Three clear strategic insights derived from combining the trend and competitor analyses. Each insight should identify a specific opportunity or challenge in the {market}, explain why it matters, and suggest how it might be addressed."
+    agent: "data_synthesizer"
+    dependencies:
+      - "trend_analysis_task"
+      - "competitor_analysis_task"
+
+  report_generation_task:
+    description: "Create a comprehensive market research report for {market} that integrates the trend analysis, competitor analysis, and strategic insights. Format the report professionally for executive stakeholders and save it using the file_saver_tool with {market} as the market parameter."
+    expected_output: "A complete market research report for {market} with the following sections clearly labeled with headings: 
+    1. Executive Summary (brief overview of key findings)
+    2. Market Trends (from trend_analyst)
+    3. Competitive Landscape (from competitor_researcher)
+    4. Strategic Insights (from data_synthesizer)
+    5. Conclusion
+    
+    The report should be properly formatted with headings, well-written and saved to disk using the file_saver_tool with {market} as the market parameter."
+    agent: "report_generator"
+    dependencies:
+      - "data_synthesis_task"
