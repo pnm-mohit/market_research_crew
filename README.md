@@ -18,6 +18,7 @@ This project implements a multi-agent system for market research with four speci
 - Automatic report generation and saving
 - Configurable agents and tasks via YAML files
 - Simple CLI interface
+- Web interface for tracking agent status and viewing results
 
 ## Project Structure
 
@@ -30,8 +31,13 @@ market_research_crew/
 │   ├── __init__.py       # Package initialization
 │   ├── web_search_tool.py # DuckDuckGo search tool
 │   └── file_saver.py     # Tool for saving reports
+├── templates/            # Web interface templates
+│   └── index.html        # Main web interface page
 ├── crew.py               # Agent and task orchestration
 ├── main.py               # CLI entry point
+├── web_app.py            # Web interface application
+├── run_web_interface.bat # Windows batch file to start web interface
+├── run_web_interface.sh  # Unix/Linux shell script to start web interface
 ├── requirements.txt      # Project dependencies
 └── README.md             # Project documentation
 ```
@@ -39,9 +45,9 @@ market_research_crew/
 ## Prerequisites
 
 - Python 3.8+
-- [Ollama](https://ollama.ai/) installed and running locally with the `llama3` model
+- [Ollama](https://ollama.ai/) installed and running locally with the `deepseek-r1:7b` model
   - Install Ollama from: https://ollama.ai/download
-  - Pull the Llama3 model: `ollama pull llama3`
+  - Pull the model: `ollama pull deepseek-r1:7b`
 
 ## Installation
 
@@ -63,29 +69,45 @@ market_research_crew/
 
 ## Usage
 
+### Command Line Interface
+
 Run the market research tool via the command line:
-
-```
-python main.py
-```
-
-You will be prompted to enter a market to research, for example:
-- "Electric Vehicles in India"
-- "Sustainable Fashion in Europe"
-- "Cloud Gaming Services in North America"
-
-Alternatively, you can specify the market directly:
 
 ```
 python main.py --market "Electric Vehicles in India"
 ```
 
-The system will:
-1. Analyze current trends in the specified market
-2. Research top competitors and their strengths/weaknesses
-3. Synthesize the data into strategic insights
-4. Generate a comprehensive report
-5. Save the report to the `reports/` directory
+Examples of markets you can research:
+- "Electric Vehicles in India"
+- "Sustainable Fashion in Europe"
+- "Cloud Gaming Services in North America"
+
+### Web Interface
+
+To use the web interface:
+
+1. On Windows:
+   ```
+   run_web_interface.bat
+   ```
+
+2. On Unix/Linux/macOS:
+   ```
+   chmod +x run_web_interface.sh
+   ./run_web_interface.sh
+   ```
+
+3. Open your browser and navigate to:
+   ```
+   http://localhost:5000
+   ```
+
+4. Enter the market you want to research and click "Start Research"
+
+The web interface will show you:
+- Current status of each agent
+- Logs of the research process
+- Final research results when complete
 
 ## Customization
 

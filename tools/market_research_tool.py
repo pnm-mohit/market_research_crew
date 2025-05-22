@@ -3,9 +3,14 @@ import requests
 import json
 import os
 import logging
+from datetime import datetime
 from dotenv import load_dotenv
 from langchain.tools import Tool
 from crewai.tools.base_tool import Tool as CrewTool
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 
 # Load environment variables
 load_dotenv()
@@ -13,6 +18,10 @@ load_dotenv()
 # Set up logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+# Filter out werkzeug logging (HTTP request logs)
+logging.getLogger('werkzeug').setLevel(logging.ERROR)
+
 handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -33,17 +42,29 @@ class MarketResearchTool:
     
     def __init__(self, 
                  serper_api_key: str = None, 
-                 alpha_vantage_key: str = None):
+                 alpha_vantage_key: str = None,
+                 output_dir: str = None):
         """
         Initialize the Market Research Tool with optional API keys.
         
         Args:
             serper_api_key: API key for web search
             alpha_vantage_key: API key for economic indicators
+            output_dir: Directory to save reports (defaults to project's reports folder)
         """
         # Prioritize passed keys, then environment variables
         self.serper_api_key = serper_api_key or os.getenv('SERPER_API_KEY')
         self.alpha_vantage_key = alpha_vantage_key or os.getenv('ALPHA_VANTAGE_API_KEY')
+        
+        # Set up output directory
+        if output_dir is None:
+            # Use the reports directory in the project root
+            self.output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'reports')
+        else:
+            self.output_dir = output_dir
+        
+        # Create output directory if it doesn't exist
+        os.makedirs(self.output_dir, exist_ok=True)
         
         # Validate API keys
         self._validate_api_keys()
@@ -216,7 +237,75 @@ class MarketResearchTool:
         Returns:
             Comprehensive market research report as JSON string
         """
-        return self._run(query)
+        result = self._run(query)
+        # Save the report as JSON
+        self._save_report(query, result)
+        # Save the report as PDF
+        self._save_report_pdf(query, result)
+        return result
+    
+    def _save_report(self, query: str, report: str) -> str:
+        """
+        Save the market research report to a file.
+        
+        Args:
+            query: The research query
+            report: The JSON report string
+        
+        Returns:
+            str: Path to the saved report file
+        """
+        # Create filename with timestamp and sanitized query
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        sanitized_query = "".join(x for x in query if x.isalnum() or x in (' ', '-', '_'))[:50]
+        filename = f"market_research_{timestamp}_{sanitized_query}.json"
+        filepath = os.path.join(self.output_dir, filename)
+        
+        # Save report
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(report)
+        
+        logger.info(f"Report saved to: {filepath}")
+        return filepath
+    
+    def _save_report_pdf(self, query: str, report: str) -> str:
+        """
+        Save the market research report to a PDF file using reportlab.
+        
+        Args:
+            query: The research query
+            report: The JSON report string
+        
+        Returns:
+            str: Path to the saved PDF report file
+        """
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        sanitized_query = "".join(x for x in query if x.isalnum() or x in (' ', '-', '_'))[:50]
+        filename = f"market_research_{timestamp}_{sanitized_query}.pdf"
+        filepath = os.path.join(self.output_dir, filename)
+
+        styles = getSampleStyleSheet()
+        styleN = styles['Normal']
+        styleH = styles['Heading1']
+        styleH.textColor = colors.blue
+        story = []
+        story.append(Paragraph(f"Market Research Report for: {query}", styleH))
+        story.append(Spacer(1, 12))
+        try:
+            report_data = json.loads(report)
+            for key, value in report_data.items():
+                if isinstance(value, (list, dict)):
+                    value_str = json.dumps(value, indent=2)
+                else:
+                    value_str = str(value)
+                story.append(Paragraph(f"<b>{key}:</b> {value_str}", styleN))
+                story.append(Spacer(1, 8))
+        except Exception as e:
+            story.append(Paragraph(f"Error parsing report: {e}", styleN))
+        doc = SimpleDocTemplate(filepath, pagesize=letter)
+        doc.build(story)
+        logger.info(f"PDF report saved to: {filepath}")
+        return filepath
 
 # Create a langchain Tool instance
 market_research_tool = MarketResearchTool()

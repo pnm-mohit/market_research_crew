@@ -3,130 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panamoure Market Research</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>Market Research Crew</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-pink: #FF007A;
-            --primary-blue: #160F44;
-            --secondary-purple: #A000FF;
-            --gradient-start: #FF007A;
-            --gradient-middle: #A000FF;
-            --gradient-end: #160F44;
-        }
-
         body {
-            background-color: #FFFFFF;
-            font-family: 'Arial', sans-serif;
-            color: var(--primary-blue);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
         }
-
         .container {
             max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .card {
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(22, 15, 68, 0.1);
-            border: none;
+        .header {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
-        }
-
-        .card-header {
-            background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle));
-            color: white;
-            border-radius: 12px 12px 0 0;
-            font-weight: 700;
-        }
-
-        .btn-primary {
-            background: var(--primary-pink);
-            border-color: var(--primary-pink);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: var(--secondary-purple);
-            border-color: var(--secondary-purple);
-        }
-
-        #logContainer {
-            background-color: #F5F5F5;
-            border-radius: 8px;
-            height: 450px;
-            overflow-y: auto;
-            padding: 15px;
-        }
-
-        .log-entry {
-            background-color: white;
-            border-left: 4px solid var(--primary-blue);
-            margin-bottom: 10px;
             padding: 10px;
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(22, 15, 68, 0.05);
+            border-bottom: 1px solid #e9ecef;
         }
-
+        .header h1 {
+            margin-left: 10px;
+            color: #333;
+        }
+        .card {
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background: linear-gradient(90deg, #ff0084, #8a2be2);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+            padding: 15px 20px;
+        }
+        .market-input {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .market-input input {
+            flex: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+        .btn-research {
+            background: linear-gradient(90deg, #ff0084, #8a2be2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
         .agent-status {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .status-indicator {
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            margin-right: 8px;
+            margin-right: 10px;
         }
-
-        .status-idle { background-color: #6c757d; }
-        .status-working { 
-            background-color: var(--primary-pink); 
-            animation: pulse 1.5s infinite;
+        .idle {
+            background-color: #6c757d;
         }
-        .status-completed { background-color: var(--secondary-purple); }
-        .status-error { background-color: #dc3545; }
-
+        .working {
+            background-color: #ffc107;
+            animation: pulse 1s infinite;
+        }
+        .completed {
+            background-color: #28a745;
+        }
+        .error {
+            background-color: #dc3545;
+        }
+        .agent-status-text {
+            margin-left: 10px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
+            0% { opacity: 1; }
             50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
-
+        .tab-container {
+            margin-top: 20px;
+        }
         .nav-tabs .nav-link {
-            color: var(--primary-blue);
-            font-weight: 600;
+            color: #495057;
+            cursor: pointer;
         }
-
         .nav-tabs .nav-link.active {
-            color: var(--primary-pink);
-            border-bottom: 2px solid var(--primary-pink);
+            color: #8a2be2;
+            font-weight: bold;
+        }
+        .tab-content {
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .results-container {
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container py-4">
-        <header class="pb-3 mb-4 border-bottom">
-            <div class="d-flex align-items-center text-dark text-decoration-none">
-                <i class="bi bi-robot fs-4 me-2 text-primary"></i>
-                <span class="fs-4">Market Research Crew</span>
-            </div>
-        </header>
+    <div class="container">
+        <div class="header">
+            <img src="https://img.icons8.com/color/48/000000/robot-2.png" alt="Robot Icon">
+            <h1>Market Research Crew</h1>
+        </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card mb-4">
-                    <div class="card-header bg-white">
-                        <h5 class="card-title mb-0">Start Market Research</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Enter a market to research and our AI agents will analyze it for you.</p>
-                        <div class="input-group mb-3">
-                            <input type="text" id="marketInput" class="form-control" placeholder="Electric Vehicles in India" aria-label="Market">
-                            <button class="btn btn-primary" type="button" id="startButton">
-                                <i class="bi bi-play-fill"></i> Start Research
-                            </button>
-                        </div>
-                        <div id="researchProgress" class="progress d-none">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-                        </div>
-                    </div>
+        <div class="card">
+            <div class="card-header">Start Market Research</div>
+            <div class="card-body">
+                <p>Enter a market to research and our AI agents will analyze it for you.</p>
+                <div class="market-input">
+                    <input type="text" id="marketInput" placeholder="Electric Vehicles in India" value="Electric Vehicles in India">
+                    <button id="startResearchBtn" class="btn-research">
+                        <span>Start Research</span>
+                        <div id="loadingSpinner" class="loading-spinner" style="display:none;"></div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -134,78 +161,47 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="card-title mb-0">Agent Status</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="list-group list-group-flush" id="agentsList">
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="agent-status status-idle"></span>
-                                    Marketing Manager
-                                </div>
-                                <span class="badge bg-secondary">Idle</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="agent-status status-idle"></span>
-                                    Trend Analyst
-                                </div>
-                                <span class="badge bg-secondary">Idle</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="agent-status status-idle"></span>
-                                    Competitor Researcher
-                                </div>
-                                <span class="badge bg-secondary">Idle</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="agent-status status-idle"></span>
-                                    Data Synthesizer
-                                </div>
-                                <span class="badge bg-secondary">Idle</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="agent-status status-idle"></span>
-                                    Report Generator
-                                </div>
-                                <span class="badge bg-secondary">Idle</span>
-                            </div>
+                    <div class="card-header">Agent Status</div>
+                    <div class="card-body">
+                        <div class="agent-status">
+                            <div id="trendAnalystStatus" class="status-indicator idle"></div>
+                            <div>Trend Analyst</div>
+                            <div id="trendAnalystStatusText" class="agent-status-text">idle</div>
+                        </div>
+                        <div class="agent-status">
+                            <div id="competitorResearcherStatus" class="status-indicator idle"></div>
+                            <div>Competitor Researcher</div>
+                            <div id="competitorResearcherStatusText" class="agent-status-text">idle</div>
+                        </div>
+                        <div class="agent-status">
+                            <div id="dataSynthesizerStatus" class="status-indicator idle"></div>
+                            <div>Data Synthesizer</div>
+                            <div id="dataSynthesizerStatusText" class="agent-status-text">idle</div>
+                        </div>
+                        <div class="agent-status">
+                            <div id="reportGeneratorStatus" class="status-indicator idle"></div>
+                            <div>Report Generator</div>
+                            <div id="reportGeneratorStatusText" class="agent-status-text">idle</div>
                         </div>
                     </div>
                 </div>
             </div>
-            
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <ul class="nav nav-tabs card-header-tabs" id="logTabs" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link active" id="logs-tab" data-bs-toggle="tab" href="#logs" role="tab" aria-controls="logs" aria-selected="true">Agent Logs</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link" id="result-tab" data-bs-toggle="tab" href="#result" role="tab" aria-controls="result" aria-selected="false">Results</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="logTabsContent">
-                            <div class="tab-pane fade show active" id="logs" role="tabpanel" aria-labelledby="logs-tab">
-                                <div id="logContainer"></div>
-                            </div>
-                            <div class="tab-pane fade" id="result" role="tabpanel" aria-labelledby="result-tab">
-                                <div id="resultContainer">
-                                    <h4 id="resultTitle">Research Results</h4>
-                                    <div id="resultContent" class="mt-3"></div>
-                                </div>
-                                <div id="noResultMessage" class="text-center py-5">
-                                    <i class="bi bi-file-earmark-text fs-1 text-secondary"></i>
-                                    <p class="mt-3">No results yet. Start a market research to see the report here.</p>
-                                </div>
-                            </div>
+                <div class="tab-container">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs" type="button" role="tab" aria-controls="logs" aria-selected="true">Agent Logs</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="results-tab" data-bs-toggle="tab" data-bs-target="#results" type="button" role="tab" aria-controls="results" aria-selected="false">Results</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="logs" role="tabpanel" aria-labelledby="logs-tab">
+                            <div id="logsContainer"></div>
+                        </div>
+                        <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="results-tab">
+                            <div id="resultsContainer" class="results-container"></div>
                         </div>
                     </div>
                 </div>
@@ -213,240 +209,195 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.6.1/dist/socket.io.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Connect to the Socket.IO server
-            const socket = io();
+        // DOM elements
+        const marketInput = document.getElementById('marketInput');
+        const startResearchBtn = document.getElementById('startResearchBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const logsContainer = document.getElementById('logsContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        
+        // Agent status indicators
+        const trendAnalystStatus = document.getElementById('trendAnalystStatus');
+        const competitorResearcherStatus = document.getElementById('competitorResearcherStatus');
+        const dataSynthesizerStatus = document.getElementById('dataSynthesizerStatus');
+        const reportGeneratorStatus = document.getElementById('reportGeneratorStatus');
+        
+        // Agent status text elements
+        const trendAnalystStatusText = document.getElementById('trendAnalystStatusText');
+        const competitorResearcherStatusText = document.getElementById('competitorResearcherStatusText');
+        const dataSynthesizerStatusText = document.getElementById('dataSynthesizerStatusText');
+        const reportGeneratorStatusText = document.getElementById('reportGeneratorStatusText');
+        
+        // Status polling interval (in milliseconds)
+        const POLLING_INTERVAL = 1000;
+        let pollingTimer = null;
+        
+        // Start research function
+        async function startResearch() {
+            const market = marketInput.value.trim();
+            if (!market) {
+                alert('Please enter a market to research');
+                return;
+            }
             
-            // UI elements
-            const marketInput = document.getElementById('marketInput');
-            const startButton = document.getElementById('startButton');
-            const researchProgress = document.getElementById('researchProgress');
-            const logContainer = document.getElementById('logContainer');
-            const resultContainer = document.getElementById('resultContainer');
-            const resultContent = document.getElementById('resultContent');
-            const resultTitle = document.getElementById('resultTitle');
-            const noResultMessage = document.getElementById('noResultMessage');
-            const agentsList = document.getElementById('agentsList');
-            
-            // Map of agent roles to their status elements
-            const agentStatusMap = {};
-            
-            // Initialize agent status map
-            document.querySelectorAll('#agentsList .list-group-item').forEach(item => {
-                const agentName = item.querySelector('div').textContent.trim();
-                const statusIcon = item.querySelector('.agent-status');
-                const statusBadge = item.querySelector('.badge');
+            try {
+                // Disable button and show loading spinner
+                startResearchBtn.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
                 
-                agentStatusMap[agentName] = {
-                    element: item,
-                    icon: statusIcon,
-                    badge: statusBadge
-                };
-            });
-            
-            let currentJobId = null;
-            
-            // Handle form submission
-            startButton.addEventListener('click', function() {
-                const market = marketInput.value.trim();
-                if (!market) {
-                    alert('Please enter a market to research.');
-                    return;
-                }
+                // Clear previous results and logs
+                logsContainer.innerHTML = '';
+                resultsContainer.innerHTML = '';
                 
-                // Clear previous logs and results
-                logContainer.innerHTML = '';
-                resultContent.innerHTML = '';
-                noResultMessage.style.display = 'block';
-                resultContainer.style.display = 'none';
+                // Reset agent status indicators
+                resetAgentStatus();
                 
-                // Reset agent status
-                for (const agent in agentStatusMap) {
-                    updateAgentStatus(agent, 'idle');
-                }
-                
-                // Show progress indicator
-                startButton.disabled = true;
-                researchProgress.classList.remove('d-none');
-                
-                // Add initial log entry
-                addLogEntry(`Starting market research for: ${market}`, 'start');
-                
-                // Send the market research request
-                fetch('/start-research', {
+                // Start the research
+                const response = await fetch('/api/research', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ market })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        currentJobId = data.job_id;
-                        addLogEntry(`Job started with ID: ${data.job_id}`, 'progress');
-                    } else {
-                        addLogEntry(`Error: ${data.error}`, 'error');
-                        startButton.disabled = false;
-                        researchProgress.classList.add('d-none');
-                    }
-                })
-                .catch(error => {
-                    addLogEntry(`Error: ${error.message}`, 'error');
-                    startButton.disabled = false;
-                    researchProgress.classList.add('d-none');
                 });
-            });
-            
-            // Socket.IO event handlers
-            socket.on('connect', function() {
-                console.log('Connected to server');
-            });
-            
-            socket.on('disconnect', function() {
-                console.log('Disconnected from server');
-            });
-            
-            socket.on('status_update', function(data) {
-                console.log('Detailed Status Update:', data);
                 
-                // Always add log entry
-                addLogEntry(data.message, data.type);
-                
-                // Scroll log container to bottom
-                const logContainer = document.getElementById('logContainer');
-                logContainer.scrollTop = logContainer.scrollHeight;
-                
-                // Update agent status more comprehensively
-                if (data.data && data.data.agent) {
-                    const agentName = data.data.agent;
-                    let status = 'idle';
-                    
-                    // Determine status based on event type
-                    switch(data.type) {
-                        case 'agent_working':
-                            status = 'working';
-                            break;
-                        case 'agent_done':
-                        case 'task_completed':
-                            status = 'completed';
-                            break;
-                        case 'task_failed':
-                        case 'error':
-                            status = 'error';
-                            break;
-                        default:
-                            status = 'idle';
-                    }
-                    
-                    // Update agent status
-                    updateAgentStatus(agentName, status);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to start research');
                 }
-            });
-            
-            socket.on('job_completed', function(data) {
-                console.log('Job completed:', data);
-                addLogEntry(`Market research completed for: ${data.market}`, 'complete');
                 
-                // Show the result
-                fetchAndShowResult(data.report_path);
+                // Start polling for updates
+                startPolling();
                 
-                // Enable the start button and hide progress
-                startButton.disabled = false;
-                researchProgress.classList.add('d-none');
-            });
-            
-            socket.on('job_error', function(data) {
-                console.log('Job error:', data);
-                addLogEntry(`Error during market research: ${data.error}`, 'error');
+            } catch (error) {
+                console.error('Error starting research:', error);
+                alert(`Error: ${error.message}`);
                 
-                // Enable the start button and hide progress
-                startButton.disabled = false;
-                researchProgress.classList.add('d-none');
-            });
-            
-            // Helper function to add a log entry
-            function addLogEntry(message, type) {
-                const logContainer = document.getElementById('logContainer');
-                const entry = document.createElement('div');
-                entry.className = `log-entry ${type}`;
-                
-                const timestamp = document.createElement('div');
-                timestamp.className = 'timestamp';
-                timestamp.textContent = new Date().toLocaleTimeString();
-                
-                const content = document.createElement('div');
-                content.className = 'content';
-                content.textContent = message;
-                
-                entry.appendChild(timestamp);
-                entry.appendChild(content);
-                logContainer.appendChild(entry);
-                
-                // Always scroll to bottom
-                logContainer.scrollTop = logContainer.scrollHeight;
+                // Re-enable the button and hide the spinner
+                startResearchBtn.disabled = false;
+                loadingSpinner.style.display = 'none';
             }
-            
-            // Helper function to update agent status
-            function updateAgentStatus(agentName, status) {
-                const agent = agentStatusMap[agentName];
-                if (!agent) return;
+        }
+        
+        // Poll for status updates
+        async function pollStatus() {
+            try {
+                const statusResponse = await fetch('/api/status');
+                const statusData = await statusResponse.json();
                 
-                // Remove all status classes
-                agent.icon.classList.remove('status-idle', 'status-working', 'status-completed', 'status-error');
-                agent.badge.classList.remove('bg-secondary', 'bg-warning', 'bg-success', 'bg-danger');
+                // Update agent status indicators
+                const statusMap = statusData.status;
+                updateAgentStatus('trend_analyst', statusMap.trend_analyst);
+                updateAgentStatus('competitor_researcher', statusMap.competitor_researcher);
+                updateAgentStatus('data_synthesizer', statusMap.data_synthesizer);
+                updateAgentStatus('report_generator', statusMap.report_generator);
                 
-                // Add appropriate status class
-                switch (status) {
-                    case 'idle':
-                        agent.icon.classList.add('status-idle');
-                        agent.badge.classList.add('bg-secondary');
-                        agent.badge.textContent = 'Idle';
-                        break;
-                    case 'working':
-                        agent.icon.classList.add('status-working');
-                        agent.badge.classList.add('bg-warning');
-                        agent.badge.textContent = 'Working';
-                        break;
-                    case 'completed':
-                        agent.icon.classList.add('status-completed');
-                        agent.badge.classList.add('bg-success');
-                        agent.badge.textContent = 'Completed';
-                        break;
-                    case 'error':
-                        agent.icon.classList.add('status-error');
-                        agent.badge.classList.add('bg-danger');
-                        agent.badge.textContent = 'Error';
-                        break;
+                // Update logs
+                updateLogs(statusData.agent_logs);
+                
+                // If research is no longer in progress, get results and stop polling
+                if (!statusData.in_progress) {
+                    await pollResults();
+                    stopPolling();
+                    
+                    // Re-enable the button and hide the spinner
+                    startResearchBtn.disabled = false;
+                    loadingSpinner.style.display = 'none';
                 }
+                
+            } catch (error) {
+                console.error('Error polling status:', error);
+            }
+        }
+        
+        // Poll for results
+        async function pollResults() {
+            try {
+                const resultsResponse = await fetch('/api/results');
+                const resultsData = await resultsResponse.json();
+                
+                // Display results
+                if (resultsData.results && resultsData.results.length > 0) {
+                    resultsContainer.innerHTML = '<pre>' + resultsData.results[0] + '</pre>';
+                }
+                
+            } catch (error) {
+                console.error('Error polling results:', error);
+            }
+        }
+        
+        // Reset agent status
+        function resetAgentStatus() {
+            updateAgentStatus('trend_analyst', 'idle');
+            updateAgentStatus('competitor_researcher', 'idle');
+            updateAgentStatus('data_synthesizer', 'idle');
+            updateAgentStatus('report_generator', 'idle');
+        }
+        
+        // Update agent status
+        function updateAgentStatus(agentId, status) {
+            let indicator;
+            let statusText;
+            
+            switch(agentId) {
+                case 'trend_analyst':
+                    indicator = trendAnalystStatus;
+                    statusText = trendAnalystStatusText;
+                    break;
+                case 'competitor_researcher':
+                    indicator = competitorResearcherStatus;
+                    statusText = competitorResearcherStatusText;
+                    break;
+                case 'data_synthesizer':
+                    indicator = dataSynthesizerStatus;
+                    statusText = dataSynthesizerStatusText;
+                    break;
+                case 'report_generator':
+                    indicator = reportGeneratorStatus;
+                    statusText = reportGeneratorStatusText;
+                    break;
+                default:
+                    return;
             }
             
-            // Helper function to fetch and show the result
-            function fetchAndShowResult(reportPath) {
-                const filename = reportPath.split('/').pop();
-                
-                fetch(`/reports/${filename}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.content) {
-                            resultTitle.textContent = `Research Results: ${marketInput.value}`;
-                            resultContent.innerHTML = marked.parse(data.content);
-                            noResultMessage.style.display = 'none';
-                            resultContainer.style.display = 'block';
-                            
-                            // Switch to result tab
-                            document.getElementById('result-tab').click();
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching report:', error);
-                    });
+            // Update the status indicator class
+            indicator.className = 'status-indicator ' + status;
+            
+            // Update the status text
+            statusText.textContent = status;
+        }
+        
+        // Update logs
+        function updateLogs(logs) {
+            if (!logs || logs.length === 0) return;
+            
+            logsContainer.innerHTML = '';
+            logs.forEach(log => {
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.textContent = log;
+                logsContainer.appendChild(logEntry);
+            });
+        }
+        
+        // Start polling
+        function startPolling() {
+            if (pollingTimer) return;
+            pollingTimer = setInterval(pollStatus, POLLING_INTERVAL);
+        }
+        
+        // Stop polling
+        function stopPolling() {
+            if (pollingTimer) {
+                clearInterval(pollingTimer);
+                pollingTimer = null;
             }
-        });
+        }
+        
+        // Event listeners
+        startResearchBtn.addEventListener('click', startResearch);
     </script>
 </body>
 </html> 

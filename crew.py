@@ -3,7 +3,7 @@ Market Research Crew - Agent and Task Orchestration
 """
 import os
 import yaml
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Callable
 from crewai import Agent, Task, Crew
 from crewai.llm import LLM # Import CrewAI's LLM wrapper
 from dotenv import load_dotenv
@@ -38,11 +38,12 @@ class SimplifiedCrew:
     Orchestrates a simplified crew of agents (e.g., for story generation or market research).
     """
     
-    def __init__(self, config_dir: str = "config"):
+    def __init__(self, config_dir: str = "config", status_callback: Optional[Callable] = None):
         """
         Initialize the Crew.
         Args:
             config_dir: Directory containing configuration files (default: "config")
+            status_callback: Optional callback function to update agent status
         """
         self.config_dir = config_dir
         self.agents_config = self._load_config("agents.yaml")
@@ -57,6 +58,8 @@ class SimplifiedCrew:
         # Create output directory if it doesn't exist (though not used in this simple example)
         if not os.path.exists("reports"):
             os.makedirs("reports")
+        
+        self.status_callback = status_callback
     
     def _load_config(self, filename: str) -> Dict[str, Any]:
         """
@@ -120,6 +123,11 @@ class SimplifiedCrew:
             )
             agents[agent_id] = agent
             print(f"[SimplifiedCrew] Created agent: {agent_id} with role: {agent_config['role']} and tools: {[t.name for t in agent_tools]}")
+            
+            # Update status through callback
+            if self.status_callback:
+                self.status_callback(agent_id, "idle", f"Agent {agent_id} initialized")
+            
         return agents
     
     def _create_tasks(self, agents: Dict[str, Agent]) -> List[Task]:
@@ -152,7 +160,8 @@ class SimplifiedCrew:
             task = Task(
                 description=current_task_description,
                 expected_output=current_expected_output,
-                agent=agent_instance
+                agent=agent_instance,
+                callbacks=[self._task_callback]  # Add callback
             )
             tasks.append(task)
             task_map[task_id] = task
@@ -167,6 +176,45 @@ class SimplifiedCrew:
                 else:
                     print(f"[SimplifiedCrew] Could not satisfy all dependencies for task '{task_id}'. Check task names in dependencies.")
         return tasks
+    
+    def _task_callback(self, event_type, agent, task=None, **kwargs):
+        """Callback to track task progress and update agent status."""
+        if not self.status_callback:
+            return
+        
+        agent_id = None
+        status = "idle"
+        message = None
+        
+        # Get agent ID from task's agent (using role as fallback)
+        if agent:
+            for aid, a_config in self.agents_config["agents"].items():
+                if a_config["role"] == agent.role:
+                    agent_id = aid
+                    break
+        
+        if not agent_id:
+            return
+            
+        # Handle different event types
+        if event_type == "task_started":
+            status = "working"
+            message = f"Starting task: {task.description[:50]}..."
+        elif event_type == "task_completed":
+            status = "completed"
+            message = "Task completed"
+        elif event_type == "task_failed":
+            status = "error"
+            message = f"Task failed: {kwargs.get('exception', 'Unknown error')}"
+        elif event_type == "agent_started":
+            status = "working"
+            message = "Agent started"
+        elif event_type == "agent_finished":
+            status = "completed"
+            message = "Agent finished"
+            
+        # Update status through callback
+        self.status_callback(agent_id, status, message)
     
     def run(self, run_input: Dict[str, str]) -> str:
         """
@@ -208,7 +256,8 @@ class SimplifiedCrew:
             task = Task(
                 description=formatted_description,
                 expected_output=formatted_expected_output,
-                agent=agent_instance
+                agent=agent_instance,
+                callbacks=[self._task_callback]  # Add callback
             )
             formatted_tasks.append(task)
             task_map[task_id] = task # Store for dependency linking
